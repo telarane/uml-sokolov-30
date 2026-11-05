@@ -1,0 +1,65 @@
+@startuml main-flow.puml
+!include ../../_Style.puml
+title ВИ-01 «Заказать поездку»: основной сценарий
+
+' Участники (5 штук: 1 актер и 4 системы/компонента)
+actor "Клиент" as client
+participant "Мобильное\nприложение" as app
+participant "Сервер\nзаказов" as order_svc
+participant "Картографический\nсервис" as maps <<system>>
+participant "Платёжный\nшлюз" as pay <<system>>
+
+' --- Шаги 1-2 ---
+client -> app : указать адреса (подачи, назначения)
+activate app
+app -> order_svc : создатьЗаказ(адреса)
+activate order_svc
+
+order_svc -> maps : запроситьКоординатыИРасстояние(адреса)
+activate maps
+maps --> order_svc : координаты, расстояние
+deactivate maps
+
+' --- Шаг 3 ---
+order_svc -> order_svc : рассчитатьСтоимость(тариф, коэффициент_спроса)
+note right of order_svc : Расчет стоимости\n(ВИ-07)
+
+' --- Шаг 4 ---
+order_svc --> app : стоимость_поездки
+app --> client : отобразить_стоимость
+client -> app : подтвердить_заказ
+app -> order_svc : подтверждение_заказа
+
+' --- Шаг 5 ---
+order_svc -> order_svc : проверитьСтатусКлиента()
+note right of order_svc : Проверка долгов и блокировок\n(ВИ-06)
+opt клиент заблокирован или имеет долг
+    order_svc --> app : ошибка (блокировка/долг)
+    app --> client : показать причину и предложить поддержку
+end
+
+' --- Шаг 6 ---
+opt водитель найден (свободен, радиус 5 км)
+    order_svc -> order_svc : подобратьВодителя(радиус=5км)
+    note right of order_svc : Поиск водителя\n(ВИ-08)
+end
+
+' --- Шаг 7 ---
+order_svc -> pay : резервироватьСумму(стоимость)
+activate pay
+pay --> order_svc : резерв_успешен
+deactivate pay
+
+' --- Шаги 8-10 ---
+order_svc -> order_svc : назначитьВодителя()
+order_svc --> app : уведомление "Водитель назначен"
+app --> client : статус "Водитель назначен"
+client -> app : ожидать_подачу
+app -> order_svc : запрос_статуса
+order_svc --> app : передать_заказ_водителю
+app --> client : водитель_в_пути
+
+deactivate order_svc
+deactivate app
+
+@enduml
