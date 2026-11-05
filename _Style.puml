@@ -1,0 +1,121 @@
+skinparam dpi 150
+skinparam shadowing false
+skinparam defaultFontName "DejaVu Sans"
+skinparam defaultFontSize 12
+skinparam defaultTextAlignment center
+
+!define PRIMARY_COLOR       #2A5298
+!define SECONDARY_COLOR     #81C784
+!define ACCENT_COLOR        #4FC3F7
+!define BACKGROUND_COLOR    #F0F4F8
+!define TEXT_COLOR          #333333
+!define BORDER_COLOR        #666666
+!define WARNING_COLOR       #FFB74D
+!define DANGER_COLOR        #E57373
+
+skinparam sequence {
+    ArrowColor          PRIMARY_COLOR
+    ActorBorderColor    PRIMARY_COLOR
+    ActorBackgroundColor BACKGROUND_COLOR
+    ActorFontColor      TEXT_COLOR
+    LifeLineBorderColor PRIMARY_COLOR
+    ParticipantBorderColor PRIMARY_COLOR
+    ParticipantBackgroundColor BACKGROUND_COLOR
+    ParticipantFontColor TEXT_COLOR
+    NoteBackgroundColor #FFF9C4
+    NoteBorderColor     WARNING_COLOR
+}
+
+skinparam class {
+    BackgroundColor     BACKGROUND_COLOR
+    BorderColor         PRIMARY_COLOR
+    ArrowColor          PRIMARY_COLOR
+    FontColor           TEXT_COLOR
+    AttributeFontColor  TEXT_COLOR
+    AttributeFontSize   11
+    ClassFontSize       13
+    ClassFontStyle      bold
+}
+
+skinparam activity {
+    BackgroundColor     BACKGROUND_COLOR
+    BorderColor         PRIMARY_COLOR
+    ArrowColor          PRIMARY_COLOR
+    FontColor           TEXT_COLOR
+    DiamondBackgroundColor #FFF9C4
+    DiamondBorderColor  WARNING_COLOR
+    StartColor          SECONDARY_COLOR
+    EndColor            DANGER_COLOR
+}
+
+skinparam component {
+    BackgroundColor     BACKGROUND_COLOR
+    BorderColor         PRIMARY_COLOR
+    ArrowColor          PRIMARY_COLOR
+    FontColor           TEXT_COLOR
+    InterfaceBackgroundColor ACCENT_COLOR
+    InterfaceBorderColor PRIMARY_COLOR
+}
+
+skinparam node {
+    BackgroundColor     BACKGROUND_COLOR
+    BorderColor         PRIMARY_COLOR
+    FontColor           TEXT_COLOR
+}
+skinparam database {
+    BackgroundColor     BACKGROUND_COLOR
+    BorderColor         PRIMARY_COLOR
+    FontColor           TEXT_COLOR
+}
+skinparam cloud {
+    BackgroundColor     BACKGROUND_COLOR
+    BorderColor         ACCENT_COLOR
+    FontColor           TEXT_COLOR
+}
+
+skinparam usecase {
+    BackgroundColor     BACKGROUND_COLOR
+    BorderColor         PRIMARY_COLOR
+    ArrowColor          PRIMARY_COLOR
+    ActorBorderColor    PRIMARY_COLOR
+    ActorBackgroundColor BACKGROUND_COLOR
+}
+
+skinparam note {
+    BackgroundColor     #FFF9C4
+    BorderColor         WARNING_COLOR
+    FontColor           TEXT_COLOR
+}
+
+skinparam package {
+    BackgroundColor     transparent
+    BorderColor         BORDER_COLOR
+    FontColor           TEXT_COLOR
+    FontStyle           bold
+}
+skinparam rectangle {
+    BackgroundColor     BACKGROUND_COLOR
+    BorderColor         PRIMARY_COLOR
+}
+
+skinparam title {
+    FontSize            16
+    FontStyle           bold
+    FontColor           PRIMARY_COLOR
+}
+skinparam caption {
+    FontSize            11
+    FontColor           BORDER_COLOR
+}
+
+skinparam participant {
+    BackgroundColor     BACKGROUND_COLOR
+    BorderColor         PRIMARY_COLOR
+    FontColor           TEXT_COLOR
+    FontStyle           bold
+}
+skinparam actor {
+    BackgroundColor     BACKGROUND_COLOR
+    BorderColor         PRIMARY_COLOR
+    FontColor           TEXT_COLOR
+}
