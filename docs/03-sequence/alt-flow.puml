@@ -1,0 +1,63 @@
+@startuml alt-flow.puml
+!include ../../_Style.puml
+title ВИ-01 «Заказать поездку»: исключения
+
+' Участники (6 штук: 2 актера, 3 системы, 1 БД)
+actor "Клиент" as client
+participant "Мобильное\nприложение" as app
+participant "Сервер\nзаказов" as order_svc
+participant "Сервис\nподбора" as match_svc
+participant "Платёжный\nшлюз" as pay <<system>>
+collections "БД\nПоездок" as db
+
+client -> app : указать(адреса)
+activate app
+app -> order_svc : создатьЗаказ(адреса)
+activate order_svc
+
+' === ОБЯЗАТЕЛЬНЫЙ ALT С >= 3 ВЕТВЯМИ (включая отказ) ===
+alt Свободных водителей нет (И-3)
+    order_svc --> app : отказ: нет водителей в радиусе 5 км
+    app --> client : предложить подождать
+    order_svc -> order_svc : расширить радиус до 10 км
+    
+else Клиент заблокирован или имеет долг (И-2)
+    order_svc --> app : отказ: аккаунт заблокирован
+    app --> client : показать причину блокировки
+
+else Платёжный шлюз недоступен (И-5)
+    order_svc -> pay : резервироватьСумму(стоимость)
+    activate pay
+    note right of pay : Таймаут 5 секунд
+    deactivate pay
+    order_svc --> app : отказ: техническая ошибка
+    app --> client : резерв не удержан
+end
+
+' === ОБЯЗАТЕЛЬНЫЙ OPT ===
+opt Водитель успешно найден
+    order_svc -> match_svc : найтиВодителя(радиус=10км)
+    activate match_svc
+    match_svc -> db : SELECT водители
+    activate db
+    db --> match_svc : список водителей
+    deactivate db
+    match_svc --> order_svc : id_водителя
+    deactivate match_svc
+    
+    ' === ОБЯЗАТЕЛЬНОЕ АСИНХРОННОЕ СООБЩЕНИЕ ===
+    ' Тонкая стрелка (->>) означает fire-and-forget (без ожидания ответа)
+    order_svc ->> match_svc : [async] событие OrderCreated
+end
+
+' === ОБЯЗАТЕЛЬНЫЙ LOOP С ГАРДОМ ===
+loop пока клиент ожидает подачу (guard: статус = В_ПУТИ, каждые 30 сек)
+    order_svc -> order_svc : проверить статус поездки
+end
+
+order_svc --> app : статус "Водитель в пути"
+deactivate order_svc
+app --> client : результат
+deactivate app
+
+@enduml
