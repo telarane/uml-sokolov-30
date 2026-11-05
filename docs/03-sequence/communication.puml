@@ -1,0 +1,23 @@
+@startuml communication.puml
+!include ../../_Style.puml
+title Диаграмма коммуникации: ВИ-01 «Заказать поездку»
+
+object "<u>:Клиент</u>" as client
+object "<u>app : МобильноеПриложение</u>" as app
+object "<u>order_svc : СерверЗаказов</u>" as order_svc
+object "<u>maps : КартографическийСервис</u>" as maps
+object "<u>pay : ПлатёжныйШлюз</u>" as pay
+
+client -- app : 1: указать адреса
+app -- order_svc : 2: создатьЗаказ(адреса)
+order_svc -- maps : 2.1: рассчитатьМаршрут(адреса)
+order_svc -- order_svc : 2.2: рассчитатьСтоимость()
+order_svc -- app : 3: стоимость поездки
+app -- client : 3.1: подтвердить заказ
+client -- app : 4: подтверждение
+app -- order_svc : 4.1: подтвердить_заказ()
+order_svc -- pay : 4.2: резервироватьСумму()
+pay -- order_svc : 4.2.1: резерв_успешен
+order_svc -- app : 5: статус "Водитель назначен"
+
+@enduml
