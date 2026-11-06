@@ -62,11 +62,13 @@ skinparam node {
     BorderColor         PRIMARY_COLOR
     FontColor           TEXT_COLOR
 }
+
 skinparam database {
     BackgroundColor     BACKGROUND_COLOR
     BorderColor         PRIMARY_COLOR
     FontColor           TEXT_COLOR
 }
+
 skinparam cloud {
     BackgroundColor     BACKGROUND_COLOR
     BorderColor         ACCENT_COLOR
@@ -93,6 +95,7 @@ skinparam package {
     FontColor           TEXT_COLOR
     FontStyle           bold
 }
+
 skinparam rectangle {
     BackgroundColor     BACKGROUND_COLOR
     BorderColor         PRIMARY_COLOR
@@ -103,6 +106,7 @@ skinparam title {
     FontStyle           bold
     FontColor           PRIMARY_COLOR
 }
+
 skinparam caption {
     FontSize            11
     FontColor           BORDER_COLOR
@@ -114,8 +118,14 @@ skinparam participant {
     FontColor           TEXT_COLOR
     FontStyle           bold
 }
+
 skinparam actor {
     BackgroundColor     BACKGROUND_COLOR
     BorderColor         PRIMARY_COLOR
     FontColor           TEXT_COLOR
 }
+
+
+
+
+'i
