@@ -1,0 +1,21 @@
+@startuml 01-context.puml
+!include <C4/C4_Context>
+title Уровень 1 — System Context: Служба такси
+
+Person(client, "Клиент", "Заказывает поездки, оплачивает, оценивает")
+Person(driver, "Водитель", "Принимает заказы, выполняет поездки")
+
+System(taxi_system, "Служба такси", "Заказ поездок, подбор водителей, расчёт стоимости")
+
+System_Ext(payment_gw, "Платёжный шлюз", "Проводит оплату и возвраты")
+System_Ext(maps_api, "Картографический сервис", "Строит маршруты, считает расстояние")
+System_Ext(sms_gw, "SMS-шлюз", "Отправляет уведомления клиентам и водителям")
+
+Rel(client, taxi_system, "Заказывает поездки", "HTTPS")
+Rel(driver, taxi_system, "Получает заказы", "HTTPS")
+Rel(taxi_system, payment_gw, "Проводит транзакции", "HTTPS/REST")
+Rel(taxi_system, maps_api, "Запрашивает маршруты", "HTTPS/REST")
+Rel(taxi_system, sms_gw, "Отправляет СМС", "HTTPS")
+
+SHOW_LEGEND()
+@enduml
