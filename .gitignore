@@ -1,6 +1,6 @@
-out/
-*.png
-*.svg
+out/*
+!out/png/
+!out/png/*.png
 docs/06-c4/.structurizr/
 docs/06-c4/workspace.jsondocs/06-c4/.structurizr/
 docs/06-c4/workspace.json
