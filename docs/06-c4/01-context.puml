@@ -18,4 +18,4 @@ Rel(taxi_system, maps_api, "Запрашивает маршруты", "HTTPS/RES
 Rel(taxi_system, sms_gw, "Отправляет СМС", "HTTPS")
 
 SHOW_LEGEND()
-@enduml
+@enduml' trigger CI
