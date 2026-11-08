@@ -1,0 +1,28 @@
+@startuml 03-component.puml
+!include <C4/C4_Component>
+title Уровень 3 — Components: Сервер заказов
+
+Container(mobile_app, "Мобильное приложение", "React Native")
+Container(api_gateway, "API Gateway", "Nginx")
+ContainerDb(db, "База данных", "PostgreSQL")
+ContainerQueue(bus, "Очередь событий", "RabbitMQ")
+
+Container_Boundary(backend, "Сервер заказов (Kotlin / Spring Boot)") {
+    Component(order_ctrl, "OrderController", "Spring MVC", "REST-эндпоинты для заказов")
+    Component(order_svc, "OrderService", "Kotlin", "Создание и управление заказами")
+    Component(price_svc, "PricingService", "Kotlin", "Расчёт стоимости по тарифу")
+    Component(repo, "OrderRepository", "Spring Data JPA", "Доступ к данным заказов")
+    Component(event_pub, "EventPublisher", "Kotlin", "Публикация доменных событий")
+}
+
+Rel(mobile_app, api_gateway, "Отправляет запросы", "JSON/HTTPS")
+Rel(api_gateway, order_ctrl, "Направляет запрос", "HTTP")
+Rel(order_ctrl, order_svc, "Вызывает методы")
+Rel(order_svc, price_svc, "Рассчитывает цену")
+Rel(order_svc, repo, "Сохраняет заказ")
+Rel(order_svc, event_pub, "Публикует события")
+Rel(repo, db, "Читает и пишет", "JDBC")
+Rel(event_pub, bus, "Отправляет события", "AMQP")
+
+SHOW_LEGEND()
+@enduml
