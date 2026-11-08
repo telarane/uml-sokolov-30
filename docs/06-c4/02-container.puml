@@ -1,0 +1,34 @@
+@startuml 02-container.puml
+!include <C4/C4_Container>
+title Уровень 2 — Containers: Служба такси
+
+Person(client, "Клиент")
+Person(driver, "Водитель")
+
+System_Boundary(taxi_system, "Служба такси") {
+    Container(mobile_app, "Мобильное приложение", "React Native", "Интерфейс для клиента")
+    Container(driver_app, "Приложение водителя", "Flutter", "Интерфейс для водителя")
+    Container(api_gateway, "API Gateway", "Nginx", "Маршрутизация и авторизация")
+    Container(backend, "Сервер заказов", "Kotlin / Spring Boot", "Бизнес-логика, управление заказами")
+    ContainerDb(db, "База данных", "PostgreSQL", "Хранение пользователей и поездок")
+    ContainerQueue(bus, "Очередь событий", "RabbitMQ", "Асинхронная обработка")
+    Container(worker, "Сервис подбора", "Kotlin", "Поиск ближайшего водителя по событию")
+}
+
+System_Ext(payment_gw, "Платёжный шлюз")
+System_Ext(maps_api, "Картографический сервис")
+
+Rel(client, mobile_app, "Использует")
+Rel(driver, driver_app, "Использует")
+Rel(mobile_app, api_gateway, "Отправляет запросы", "JSON/HTTPS")
+Rel(driver_app, api_gateway, "Отправляет запросы", "JSON/HTTPS")
+Rel(api_gateway, backend, "Перенаправляет", "HTTP")
+Rel(backend, db, "Читает и пишет", "JDBC")
+Rel(backend, bus, "Публикует события", "AMQP")
+Rel(bus, worker, "Доставляет события", "AMQP")
+Rel(worker, db, "Обновляет статусы", "JDBC")
+Rel(backend, payment_gw, "Проводит платежи", "HTTPS")
+Rel(backend, maps_api, "Запрашивает геоданные", "HTTPS")
+
+SHOW_LEGEND()
+@enduml
