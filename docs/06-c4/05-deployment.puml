@@ -1,0 +1,56 @@
+@startuml 05-deployment.puml
+!include ../../_Style.puml
+title Диаграмма развёртывания (UML): Служба такси
+
+' --- Устройства пользователей ---
+node "Смартфон\nклиента" as client_device {
+    artifact "Приложение\n(React Native)" as app_artifact
+}
+
+node "Смартфон\nводителя" as driver_device {
+    artifact "Приложение\n(Flutter)" as driver_artifact
+}
+
+' --- Облачная инфраструктура (Kubernetes) ---
+node "Kubernetes-кластер" as k8s {
+
+    node "Pod: api (x3)" as pod_api {
+        artifact "taxi-api.jar\n(Spring Boot)" as jar_api
+    }
+
+    node "Pod: worker (x1)" as pod_worker {
+        artifact "taxi-worker.jar\n(Kotlin)" as jar_worker
+    }
+}
+
+' --- Хранилища данных ---
+node "Сервер БД\n(High Availability)" as db_node {
+    database "PostgreSQL 16" as pg_db
+}
+
+node "Брокер сообщений" as mq_node {
+    database "RabbitMQ 3.12" as rabbit
+}
+
+' --- Внешние системы ---
+node "Инфраструктура\nПлатёжного шлюза" as pay_node {
+    database "API Платёжного шлюза" as pay_api
+}
+
+node "Инфраструктура\nКартографического сервиса" as maps_node {
+    database "API Карт" as maps_api
+}
+
+' --- Связи (с указанием протоколов и портов) ---
+app_artifact ..> pod_api : HTTPS/443
+driver_artifact ..> pod_api : HTTPS/443
+
+jar_api ..> pg_db : JDBC/5432
+jar_api ..> rabbit : AMQP/5672
+jar_worker ..> rabbit : AMQP/5672
+jar_worker ..> pg_db : JDBC/5432
+
+jar_api ..> pay_api : HTTPS/443
+jar_api ..> maps_api : HTTPS/443
+
+@enduml
