@@ -1,0 +1,22 @@
+@startuml 04-dynamic.puml
+!include <C4/C4_Dynamic>
+title Динамический вид C4: сценарий «Заказать поездку» (ВИ-01)
+
+Person(client, "Клиент")
+Container(mobile_app, "Мобильное приложение", "React Native")
+Container(api_gateway, "API Gateway", "Nginx")
+Container(backend, "Сервер заказов", "Kotlin / Spring Boot")
+ContainerQueue(bus, "Очередь событий", "RabbitMQ")
+Container(worker, "Сервис подбора", "Kotlin")
+ContainerDb(db, "База данных", "PostgreSQL")
+
+RelIndex(1, client, mobile_app, "Указывает адреса")
+RelIndex(2, mobile_app, api_gateway, "POST /orders", "JSON/HTTPS")
+RelIndex(3, api_gateway, backend, "Создать заказ")
+RelIndex(4, backend, db, "Сохраняет заказ")
+RelIndex(5, backend, bus, "Публикует OrderCreated", "AMQP")
+RelIndex(6, bus, worker, "Доставляет событие", "AMQP")
+RelIndex(7, worker, db, "Находит водителя, обновляет статус")
+
+SHOW_LEGEND()
+@enduml
