@@ -1,4 +1,4 @@
-@startuml
+@startuml object-flow.puml
 !include ../../_Style.puml
 title Процесс оформления заказа: поток объектов
 
