@@ -1,4 +1,4 @@
-@startuml
+@startuml lifecycle.puml
 !include ../../_Style.puml
 title Жизненный цикл «Заказ»
 
